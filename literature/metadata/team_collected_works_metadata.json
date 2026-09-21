@@ -1,0 +1,56 @@
+{
+ "10.3390/su11195190": {
+  "c": 44,
+  "y": 2019,
+  "v": "Sustainability",
+  "last": "Zakaria",
+  "n": 6,
+  "ctry": "MY",
+  "t": "Markov Chain Model Development for Forecasting Air Pollution Index of Miri, Sarawak"
+ },
+ "10.1002/ece3.7562": {
+  "c": 40,
+  "y": 2021,
+  "v": "Ecology and Evolution",
+  "last": "Singh",
+  "n": 2,
+  "ctry": "GB",
+  "t": "Spatial–temporal variations in deforestation hotspots in Sumatra and Kalimantan from 2001–2018"
+ },
+ "10.1071/wf20036": {
+  "c": 32,
+  "y": 2020,
+  "v": "International Journal of Wildland Fire",
+  "last": "Tan",
+  "n": 3,
+  "ctry": "SG",
+  "t": "Spatial correlates of forest and land fires in Indonesia"
+ },
+ "10.3390/rs14030543": {
+  "c": 23,
+  "y": 2022,
+  "v": "Remote Sensing",
+  "last": "Sakti",
+  "n": 15,
+  "ctry": "ID",
+  "t": "Spatial Prioritization for Wildfire Mitigation by Integrating Heterogeneous Spatial Data: A New Multi-Dimensional Approach for Tropical Rainforests"
+ },
+ "10.14710/pwk.v10i2.7643": {
+  "c": 14,
+  "y": 2014,
+  "v": "Jurnal Pembangunan Wilayah dan Kota",
+  "last": "Widodo",
+  "n": 1,
+  "ctry": "",
+  "t": "Pemodelan Spasial Resiko Kebakaran Hutan (Studi Kasus Provinsi Jambi, Sumatera)"
+ },
+ "10.28932/jutisi.v2i3.524": {
+  "c": 5,
+  "y": 2016,
+  "v": "Jurnal Teknik Informatika dan Sistem Informasi",
+  "last": "Komara",
+  "n": 3,
+  "ctry": "ID",
+  "t": "Sistem Pendukung Keputusan Penentuan Prioritas Pemadaman Hotspot Kebakaran Hutan dan Lahan Menggunakan Metode Analytic Hierarchy Process dan Weighted Product"
+ }
+}
