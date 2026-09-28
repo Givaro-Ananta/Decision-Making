@@ -1,14 +1,21 @@
 # --- data (large / regenerable, do not commit) ---
-*.pdf
-*.zip
+# Raw + processed satellite data lives in Google Drive, not git.
+# Provenance & re-download instructions: data/README.md
+data/**
+!data/README.md
+outputs/**
+*.parquet
+*.joblib
+*.h5
+*.feather
 *.nc
 *.tif
 *.tiff
 *.hdf
-data/raw/
-data/interim/
-raw_openalex/
+*.zip
 *.csv.gz
+*.pdf
+raw_openalex/
 
 # --- python ---
 __pycache__/
