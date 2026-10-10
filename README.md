@@ -1,113 +1,87 @@
-# Decision Making — Karhutla Patrol Prioritization (ITERA)
+# Decision Making — Transisi State Hotspot Sumatra (ITERA)
 
-Research project for **Decision Making (SD25-41302)**, Data Science, Institut Teknologi Sumatera (ITERA).
+Proyek riset Decision Making (SD25-41302), Sains Data, Institut Teknologi Sumatera.
 
-**Working title:** *Prioritisasi Wilayah Patroli Kebakaran Hutan dan Lahan di Sumatra Menggunakan Covariate-Dependent Markov Chain*
+**Judul kerja:** *Analisis Retrospektif Transisi State Intensitas Deteksi Hotspot di Sumatra Menggunakan Model Markov Bergantung Kovariat Per Grid.*
 
-**Decision problem:** which spatial grid cells should be prioritized for forest-and-land-fire (karhutla) patrol on the **next day**, given limited patrol capacity.
+Penelitian mengestimasi `P(S[g,t+1] | S[g,t], X[g,t])` secara independen pada setiap grid daratan utama Sumatra. Output utama adalah state hari berikutnya beserta probabilitasnya. Scope final tidak mencakup prioritas patroli, ranking, Recall@K, alokasi sumber daya, fitur tetangga atau training pooled.
 
-**Decision maker:** fire monitoring / patrol agencies (Manggala Agni–KLHK, BPBD).
+## Status hasil dan audit validitas
 
----
+Modeling dan evaluasi frozen selesai. **Validitas operasional dan cakupan pengamatan target belum terverifikasi.** Hasil saat ini merupakan evaluasi retrospektif terhadap label panel yang dibangun; jangan menafsirkannya sebagai sistem siap memprediksi besok menggunakan informasi hari ini.
 
-## Status
+Audit 11 Oktober 2026 mengonfirmasi:
 
-| Week | Checkpoint | Status |
-|---|---|---|
-| 1 | Project setup (CRediT, repo, rules) | done |
-| 2 | Issue brief + dataset audit | done — approved by supervisor |
-| 3 | Journal-fit (target journal locked) | in progress |
-| **4** | **Literature sprint (matrix + gap)** | **documented in this repo** |
-| 5 | Research positioning (freeze title, RQs, novelty) | next |
-| 6 | Method protocol | planned |
-| 7 | Proposal assembly + pipeline smoke test | planned |
-| 8 | Midterm — proposal freeze | planned |
-| 9–13 | Data sprint, cleaning, modelling, evaluation | planned |
-| 14 | Manuscript sprint (IMRaD) | planned |
-| 15 | Internal editorial board, revision, cover letter | planned |
-| 16 | Final — submission day (OJS evidence) | planned |
+- Cuaca bertanggal t berasal dari produk yang diterbitkan belakangan. ERA5-Land memiliki keterlambatan nominal sekitar lima hari; CHIRPS preliminary mengikuti akhir pentad dan produk final terbit pada bulan berikutnya. Daily `rnl` membagi total pentadal menggunakan ERA5. Split kronologis belum memeriksa historical `available_at`.
+- Ada 84 tanggal tanpa record di dua CSV FIRMS lokal. Panel mengisi grid-day tanpa record menjadi nol tanpa sertifikat coverage pengamatan. Pada 46 grid final, 736 transisi training, 1.288 validation dan 2.392 test menyentuh tanggal tersebut pada t atau t+1. Jumlah ini bukan jumlah label yang terbukti salah.
+- Inventory publik NASA mencantumkan seluruh Mei 2026 sebagai missing untuk produk **standard S-NPP**. Ini mengonfirmasi gap database produk, bukan gangguan sensor sepanjang bulan. Pemulihan produk dan QA per grid masih diperlukan.
+- Argmax menangkap 804 dari 3.917 target berlabel aktif (20,53%). Accuracy tinggi didominasi No Activity. AUC pooled tidak membuktikan keberhasilan ranking antargrid per hari.
 
----
+Laporan lengkap dan solusi: [audit validitas final](docs/final_validity_review.md). Bukti JSON/CSV dan provenance disimpan di `outputs/reports/final_validity_review/`; audit harian serta dampak per grid di `outputs/reports/firms_observation_coverage/`. Bukti audit JSON/CSV/Markdown yang kecil ikut dilacak Git; data satelit besar dan fitted models tetap diabaikan. Laporan utama tersedia di `docs/`.
 
-## Repository layout
+Sumber primer: [ECMWF ERA5-Land](https://www.ecmwf.int/en/era5-land), [UCSB CHIRPS v3](https://www.chc.ucsb.edu/data/chirps3), [NASA outages](https://firms2.modaps.eosdis.nasa.gov/content/notifications/firms/outages.html), [NASA missing-data](https://firms.modaps.eosdis.nasa.gov/api/missing_data).
 
-```
-.
-├── README.md
-├── literature/
-│   ├── Minggu4_Literature_Sprint.md      # search protocol, matrix, state of the art, gaps
-│   ├── matriks-literatur.csv             # 42 entries x 16 columns (open in Excel/Sheets)
-│   └── metadata/
-│       ├── works_metadata.json           # slim, citation-safe metadata for all 42 works
-│       └── team_collected_works_metadata.json
-├── docs/
-│   ├── search-protocol.md                # reproducible query strings + inclusion/exclusion
-│   └── data-provenance.md                # where every number came from
-└── project/
-    └── contribution-log.md               # CRediT roles + per-member log (see rules below)
-```
+## Desain frozen
 
----
+| Komponen | Keputusan |
+|---|---|
+| Domain | Daratan utama Sumatra; polygon delapan provinsi, komponen daratan terbesar |
+| Grid | Reguler 0.5°; 187 grid studi, 46 eligible |
+| Temporal | Harian; panel 2016-09-22–2026-08-31 |
+| State 0 | Tidak ada deteksi retained (`hotspot_count=0`); observabilitas masih perlu diverifikasi |
+| State 1 | Active/non-high: ada deteksi dan FRP sum <16.84 MW |
+| State 2 | High: ada deteksi dan FRP sum ≥16.84 MW |
+| Boundary | Q75 FRP sum aktif training, sebelum eligibility filtering |
+| Prediktor | Temperatur maksimum sampel, RH rata-rata, angin rata-rata, rainfall; same-grid pada t |
+| Model | 138 multinomial transition models unweighted, independen per grid × current state |
+| Training | Target sampai 2022-12-31 |
+| Validation | Target 2023–2024 |
+| Test | Target 2025-01-01–2026-08-31; evaluasi frozen sekali |
+| Primary rule | Standard argmax |
+| Sensitivity | Guarded 0.20 dan two-stage 0.20/0.50; tidak diadopsi sebagai primary |
 
-## Week 4 literature sprint — result at a glance
+WorldCover diaudit sebagai konteks preprocessing dan tidak masuk empat prediktor final. State merupakan kategori intensitas deteksi relatif, bukan severity kebakaran yang dikalibrasi atau energi harian.
 
-- **256** works retrieved from OpenAlex + **7** papers collected manually by the team
-- **117** passed title relevance screening
-- **42** entered the matrix — C1 prediction (12), C2 remote sensing (6), C3 Markov/spatio-temporal (8), C4 decision/patrol (9), **C5 team-collected (7)**
+## Hasil frozen
 
-Clusters:
+27.968 observasi test dari 46 grid. Angka berikut conditional terhadap label panel; belum merupakan skor setelah koreksi coverage.
 
-| ID | Cluster | What it covers |
-|---|---|---|
-| C1 | Prediction & susceptibility | ML hotspot prediction, susceptibility mapping, imbalance handling |
-| C2 | Remote sensing & data | active fire products, burned area, fire weather indices |
-| C3 | Markov & spatio-temporal | CA-Markov, covariate-dependent transition frameworks, HMM |
-| C4 | Decision, patrol, allocation | resource allocation, optimization, patrol systems |
-| C5 | Team-collected | manually sourced PDFs, verified against Crossref + OpenAlex |
+| Metrik primary | Nilai |
+|---|---:|
+| Accuracy | 0.860912 |
+| Balanced Accuracy | 0.432223 |
+| Macro F1 | 0.443943 |
+| Weighted F1 | 0.821760 |
+| Log Loss | 0.411651 |
 
-### Three research gaps (tiered)
+Recall Active/non-high 0.045015 dan High 0.269325. Hasil tidak mendukung klaim active-state recovery yang kuat. Figur/tabel asli berada di [outputs/final_artifacts](outputs/final_artifacts/final_artifacts_summary.md). Artefak frozen tidak ditimpa dalam audit validitas.
 
-1. **Model level** — no hotspot state-transition model that is **conditioned on covariates**, per grid, at daily t+1 horizon. (`Zakaria 2019` used Markov on a karhutla-related air pollution index, but with a **homogeneous** transition matrix on a **single location** and steady-state output.)
-2. **Decision level** — existing prioritization (`Komara 2016`; `Sakti 2022`) operates on **already-detected** hotspots or static susceptibility; none prioritizes **next-day occurrence probability** and evaluates it with Recall@K at a capacity-meaningful K.
-3. **Data level** — `Tan 2020` showed that significant covariates for Indonesian fires **change** when the hotspot detection confidence threshold moves from 30% to 80%; no prioritization study tests the stability of its ranking against this.
+## Solusi dan reproduksibilitas audit
 
-### Novelty statement
+Koreksi dokumentasi sudah dilakukan. Langkah data berikutnya adalah memperoleh provenance standard/NRT dan grid-day coverage FIRMS, termasuk gap Mei 2026. Jika perlu koreksi, tulis panel dan eksperimen versi baru; jangan mengubah data/model frozen. Menggunakan lag atau forecast meteorologi merupakan eksperimen operasional terpisah dengan pemeriksaan release/issuance. Periode test yang sudah dilihat tidak boleh disebut untouched untuk eksperimen revisi.
 
-> This work does not claim to be first at Markov chains or at hotspot prioritization. It fills the remaining intersection: **covariate-stratified hotspot state-transition probabilities on a daily grid, evaluated as a limited-capacity prevention ranking (Recall@K), with a sensitivity test against satellite detection confidence thresholds.**
-
----
-
-## Reproducibility
-
-Every entry in the matrix carries a **resolvable DOI**. Metadata was retrieved programmatically from OpenAlex and Crossref; nothing was written from memory. The exact queries are in [`docs/search-protocol.md`](docs/search-protocol.md), and per-number sourcing is in [`docs/data-provenance.md`](docs/data-provenance.md).
-
-Regenerate/verify metadata:
+Audit tidak melakukan refit, retuning, rescreening, recalibration, perubahan threshold/state atau test inference ulang.
 
 ```bash
-# resolve any DOI in the matrix
-curl -s -o /dev/null -w '%{http_code}\n' "https://api.openalex.org/works/https://doi.org/<DOI>"
+# Requires duckdb, pandas, shapely and pyarrow; use a fresh output directory.
+python scripts/audit_firms_observation_coverage.py --output /tmp/firms-coverage-review
 
-# look up a work by title
-curl -s "https://api.openalex.org/works?search=<query>&per-page=5&select=doi,title,publication_year,cited_by_count"
+# Saved NASA JSON and frozen result tables; standard library only.
+python scripts/build_final_validity_review.py --nasa-missing-response outputs/reports/final_validity_review/nasa_missing_dates_response.json --output /tmp/final-validity-review
 ```
 
----
+## Struktur dan sejarah penelitian
 
-## Team & contribution rules
+- `configs/`: keputusan frozen dan konfigurasi eligibility/model.
+- `src/preprocessing/`, `scripts/`: preprocessing, audit dan implementasi penelitian. Script fitting/evaluasi lama bukan perintah untuk dijalankan ulang.
+- `tests/`: pemeriksaan implementasi; tidak menggantikan verifikasi ilmiah coverage.
+- `data/`: data lokal, diabaikan Git; provenance unduhan di [data/README.md](data/README.md) masih perlu dilengkapi.
+- `outputs/final_artifacts/`: figur/tabel frozen yang dilacak Git.
+- `docs/final_validity_review.md`: temuan, solusi dan batas klaim terkini.
+- `literature/`: literature sprint historis; bukan bukti semua gap/novelty telah divalidasi ulang.
 
-Three members, roles assigned under **CRediT**. See [`project/contribution-log.md`](project/contribution-log.md).
+README sebelum koreksi disimpan byte-identik di [dokumen historis Week 4](docs/history/README_week4_before_validity_review.md). Tujuan patroli dan novelty Recall@K di sana adalah konteks proposal lama, bukan kontrak implementasi final.
 
-**Rules in force for this project:**
+## Aturan kontribusi
 
-- Each member commits **under their own name** — the commit history is the contribution record.
-- Every dataset used must have a documented **provenance** entry before it enters the pipeline.
-- **Dual submission is prohibited.**
-- Generative AI is permitted only as a tool: its use must be **disclosed**, and all output must be **verified** by a human before entering the manuscript.
-- No number enters any document without a traceable source (see `docs/data-provenance.md`).
-
----
-
-## Notes
-
-- Copyrighted publisher PDFs are **not** included in this repository. Only metadata and DOIs are stored; approved full text is kept in the shared team drive.
-- Presentation scripts and anticipated-question notes are maintained separately and intentionally **not** committed here.
+Setiap anggota mencatat kontribusi dengan identitasnya sendiri. Setiap dataset/angka harus memiliki provenance yang dapat ditelusuri. Dual submission dilarang. Penggunaan AI harus diungkapkan dan hasil diverifikasi manusia sebelum masuk manuskrip. PDF penerbit tidak disimpan di repository.

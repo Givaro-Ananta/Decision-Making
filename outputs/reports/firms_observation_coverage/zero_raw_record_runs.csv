@@ -1,0 +1,13 @@
+start,end,days,any_documented_advisory,cause
+2022-07-27,2022-08-10,15,True,requires_source_coverage_evidence
+2023-07-26,2023-07-27,2,True,requires_source_coverage_evidence
+2024-05-30,2024-06-03,5,True,requires_source_coverage_evidence
+2024-07-10,2024-07-15,6,True,requires_source_coverage_evidence
+2024-07-24,2024-07-28,5,True,requires_source_coverage_evidence
+2024-09-26,2024-09-26,1,True,requires_source_coverage_evidence
+2024-11-03,2024-11-05,3,True,requires_source_coverage_evidence
+2025-11-12,2025-11-12,1,True,requires_source_coverage_evidence
+2026-03-10,2026-03-12,3,True,requires_source_coverage_evidence
+2026-04-28,2026-06-02,36,True,requires_source_coverage_evidence
+2026-07-11,2026-07-16,6,True,requires_source_coverage_evidence
+2026-08-03,2026-08-03,1,True,requires_source_coverage_evidence

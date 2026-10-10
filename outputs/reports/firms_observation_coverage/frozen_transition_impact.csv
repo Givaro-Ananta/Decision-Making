@@ -1,0 +1,16 @@
+flag,split,total_rows,origin_flagged,target_flagged,either_endpoint_flagged,flagged_targets_labeled_no_activity,affected_pct
+focus_window,test,27968,1702,1702,1794,1702,6.4144736842105265
+focus_window,train,105340,690,690,736,690,0.6986899563318777
+focus_window,validation,33626,0,0,0,0,0.0
+raw_zero_records,test,27968,2162,2162,2392,2162,8.552631578947368
+raw_zero_records,train,105340,690,690,736,690,0.6986899563318777
+raw_zero_records,validation,33626,1012,1012,1288,1012,3.830369357045144
+sumatra_zero_retained_records,test,27968,3588,3588,4784,3588,17.105263157894736
+sumatra_zero_retained_records,train,105340,4002,4002,6716,4002,6.3755458515283845
+sumatra_zero_retained_records,validation,33626,2116,2116,3266,2116,9.712722298221614
+documented_advisory_window,test,27968,2024,2024,2300,1754,8.223684210526315
+documented_advisory_window,train,105340,1150,1150,1196,1031,1.1353711790393013
+documented_advisory_window,validation,33626,1978,1978,2254,1850,6.703146374829001
+audit_suspect_union,test,27968,3450,3450,3680,3180,13.157894736842104
+audit_suspect_union,train,105340,1150,1150,1196,1031,1.1353711790393013
+audit_suspect_union,validation,33626,1978,1978,2254,1850,6.703146374829001
