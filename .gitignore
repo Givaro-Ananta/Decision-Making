@@ -39,3 +39,10 @@ desktop.ini
 .env
 *.key
 credentials.json
+
+# Final reporting artifacts are small, frozen research deliverables.
+!outputs/final_artifacts/
+!outputs/final_artifacts/*.csv
+!outputs/final_artifacts/*.md
+!outputs/final_artifacts/*.png
+!outputs/final_artifacts/reporting_provenance.json

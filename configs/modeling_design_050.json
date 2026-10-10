@@ -1,0 +1,35 @@
+{
+  "resolution_degrees": 0.5,
+  "origin_west": 94.95,
+  "origin_north": 6.05,
+  "train_end": "2022-12-31",
+  "validation_end": "2024-12-31",
+  "state_meaning": "Sum of observed FIRMS detection FRP in MW; relative observed intensity, not integrated daily energy",
+  "state_boundaries": {
+    "low_moderate": 5.96,
+    "moderate_high": 16.84
+  },
+  "threshold_training_active_rows": 41545,
+  "threshold_population": "All active training grid-days before predictor availability or eligibility filtering",
+  "state_rule": "0 when count=0; otherwise 1 if FRP<Q50, 2 if Q50<=FRP<Q75, 3 if FRP>=Q75",
+  "features": [
+    "temperature_max_c_t",
+    "relative_humidity_mean_t",
+    "wind_speed_mean_t",
+    "rainfall_mm_t"
+  ],
+  "eligibility": {
+    "min_current_state_transitions": 50,
+    "min_destination_count": 10,
+    "observations_per_free_parameter": 5,
+    "max_vif": 10,
+    "max_condition_number": 100000000.0,
+    "separation_tolerance": 1e-07,
+    "near_constant_frequency": 0.95,
+    "near_constant_unique_fraction": 0.1
+  },
+  "eligibility_scope": "Training transitions only; all four current-state groups must pass; single-destination groups deterministic",
+  "caution": "Operational safeguards; not a guarantee of statistical sufficiency or stable parameter estimates",
+  "split_rule": "Target next_date determines train/validation/test",
+  "fit_performed": false
+}

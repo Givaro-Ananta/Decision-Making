@@ -1,0 +1,18 @@
+scope,state,metric,value,n_observations,prediction_rule
+overall,All states,Accuracy,0.860912471395881,27968,primary_argmax
+overall,All states,Balanced Accuracy,0.4322229174077168,27968,primary_argmax
+overall,All states,Macro F1,0.4439434740975939,27968,primary_argmax
+overall,All states,Weighted F1,0.8217600850923112,27968,primary_argmax
+overall,All states,Log Loss,0.4116508858307047,27968,primary_argmax
+per_state,No Activity,Precision,0.8835782938778564,24051,primary_argmax
+per_state,No Activity,Recall,0.9823292170803708,24051,primary_argmax
+per_state,No Activity,F1,0.9303406182319354,24051,primary_argmax
+per_state,No Activity,AUC (one-vs-rest),0.805360889192926,24051,primary_argmax
+per_state,Active/non-high,Precision,0.2944038929440389,2688,primary_argmax
+per_state,Active/non-high,Recall,0.0450148809523809,2688,primary_argmax
+per_state,Active/non-high,F1,0.0780897063568893,2688,primary_argmax
+per_state,Active/non-high,AUC (one-vs-rest),0.7376467786976342,2688,primary_argmax
+per_state,High,Precision,0.4046454767726161,1229,primary_argmax
+per_state,High,Recall,0.2693246541903987,1229,primary_argmax
+per_state,High,F1,0.323400097703957,1229,primary_argmax
+per_state,High,AUC (one-vs-rest),0.8586976033367911,1229,primary_argmax

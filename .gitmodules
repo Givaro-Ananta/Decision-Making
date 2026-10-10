@@ -1,0 +1,3 @@
+[submodule "indonesia-geojson"]
+	path = indonesia-geojson
+	url = https://github.com/mahendrayudha/indonesia-geojson.git
