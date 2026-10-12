@@ -29,6 +29,7 @@ FIRMS_DIR = DATA_DIR / "DL_FIRE_SV-C2_809701"
 ERA5_DIR = DATA_DIR / "era5"
 CHIRPS_DIR = DATA_DIR / "chirps"
 WORLDCOVER_DIR = DATA_DIR / "worldcover"
+SUMATRA_BOUNDARY_DIR = PROJECT_ROOT / "indonesia-geojson"
 
 PROCESSED_DIR = DATA_DIR / "processed"
 BATCH_DIR = PROCESSED_DIR / "batch"
@@ -46,7 +47,7 @@ for _d in (PROCESSED_DIR, BATCH_DIR, MODELS_DIR, REPORTS_DIR, EDA_FIG_DIR,
 FIRMS_DAILY_FILE = PROCESSED_DIR / "firms_daily_grid.parquet"
 GRID_FILE = PROCESSED_DIR / "grid_sumatra.parquet"
 LANDCOVER_FILE = PROCESSED_DIR / "landcover_grid.parquet"
-NEIGHBOR_FILE = PROCESSED_DIR / "neighbors_8.parquet"
+GRID_DAY_FILE = PROCESSED_DIR / "sumatra_grid_day.parquet"
 
 # ---------------------------------------------------------------------------
 # Domain spasial — Sumatra (bbox dari data ERA5 yang sudah terverifikasi)
@@ -80,19 +81,9 @@ FIRMS_DAY_ONLY = False       # VIIRS daynight: D = siang, N = malam. Keduanya di
 # Fitur panel (harus konsisten dengan batch_builder)
 # ---------------------------------------------------------------------------
 FEATURE_COLS = [
-    # meteorologi (ERA5-Land, harian per grid)
     "temperature_t", "precipitation_t", "humidity_t", "wind_speed_t",
-    # curah hujan CHIRPS + rolling
-    "rain_t", "rain_3d", "rain_7d", "rain_14d",
-    # histori hotspot
-    "active_hotspots_3d", "active_hotspots_7d", "active_hotspots_14d",
-    "days_since_last_fire", "fire_freq_30d",
-    # spasial-static
-    "landcover_code", "is_peat", "elev_mean",
-    # tetangga spasial
-    "neighbor_hotspots_3d", "neighbor_rain_3d",
-    # state hari ini
-    "state",
+    "rain_t", "landcover_code",
 ]
-TARGET_COL = "state_t1"
+TARGET_COL = "next_state"
 META_COLS = ["grid_id", "date"]
+HOTSPOT_STATE_THRESHOLDS = None

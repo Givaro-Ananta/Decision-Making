@@ -1,0 +1,19 @@
+{
+  "source_sha256": {
+    "outputs/reports/final_test_050_3state/test_summary.json": "68a11c252865b8e0a9db93f82d1e138985ec0e60291243c748fbc9ab963a9ced",
+    "outputs/reports/final_test_050_3state/test_metrics.csv": "cd1c853ff616b751a82c56de5b8b44924cc999f036c3ba602fbc8cf6bc3198e1",
+    "outputs/reports/final_test_050_3state/test_state_metrics_auc.csv": "1b57496362a0929f399226508cda7b86f58061b6eb3ea9c4abb269fe515b59eb",
+    "outputs/reports/final_test_050_3state/test_confusion_matrices.csv": "234afb565e11717b293e8b24c0be833e68a08ff5cab159d55e14a0810af02236",
+    "outputs/reports/final_test_050_3state/test_reliability_bins.csv": "9dc1cf5288d39eb72175d7e43e64069bf3ff1fa08480f136b6ccf266584a89c1",
+    "outputs/reports/final_test_050_3state/sensitivity_false_positive_costs.csv": "e24e09ddcbf8311bf59f8f4f56b17d84222f07e278db9adb8f7ef6972fcde47e",
+    "outputs/reports/final_test_050_3state/frozen_design.json": "76aeede512bf23cf538dcc69e1f7ecf15ca4e2471d9d38ad9cad2eb3669ce5e2",
+    "data/processed/modeling_050/grid.parquet": "de98a618480e55d26446f5e147e57668f27954afde446d59aff02258a057f84b"
+  },
+  "renderer_sha256": "9d8393184d8914d8b0d0d4642c29c0811394440eb7d32b063d1f0118aba01cd5",
+  "inference_or_fitting_performed": false,
+  "frozen_primary_changed": false,
+  "eligible_grids": 46,
+  "study_grids": 187,
+  "test_observations": 27968,
+  "calibration_source": "Saved test reliability bins derived from saved test probabilities"
+}

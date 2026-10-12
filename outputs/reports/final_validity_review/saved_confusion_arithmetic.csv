@@ -1,0 +1,13 @@
+diagnostic,value
+n_test,27968
+primary_correct,24078
+actual_no_activity,24051
+arithmetic_always_no_activity_accuracy,0.8599470823798627
+primary_correct_minus_actual_no_activity,27
+accuracy_gain_percentage_points,0.09653890160183067
+actual_active,3917
+argmax_active_true_positives,804
+argmax_active_false_positives,425
+argmax_active_false_negatives,3113
+argmax_binary_active_recall,0.20525912688281847
+argmax_binary_active_precision,0.6541903986981286

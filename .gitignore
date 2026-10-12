@@ -40,7 +40,27 @@ desktop.ini
 *.key
 credentials.json
 
-# Publish only the selected journal PDF from local documentation.
+# Final reporting artifacts are small, frozen research deliverables.
+!outputs/final_artifacts/
+!outputs/final_artifacts/*.csv
+!outputs/final_artifacts/*.md
+!outputs/final_artifacts/*.png
+!outputs/final_artifacts/reporting_provenance.json
+
+# Small validity-audit evidence; raw data and fitted models stay ignored.
+!outputs/reports/
+outputs/reports/*
+!outputs/reports/firms_observation_coverage/
+!outputs/reports/final_validity_review/
+!outputs/reports/firms_observation_coverage/*.csv
+!outputs/reports/firms_observation_coverage/*.json
+!outputs/reports/firms_observation_coverage/*.md
+!outputs/reports/final_validity_review/*.csv
+!outputs/reports/final_validity_review/*.json
+!outputs/reports/final_validity_review/*.md
+
+# Publish only the selected journal PDF and its native LaTeX source.
 /docs/**
 !/docs/journal/
 !/docs/journal/ARTICLE_JTIK_LATEX.pdf
+!/docs/journal/ARTICLE_JTIK.tex

@@ -1,0 +1,5 @@
+predictor,source,valid_time,documented_release_schedule,same_day_operational_use_supported,historical_available_at_verified,context,source_url
+temperature_max_c_t,ERA5-Land,day t UTC; max of four 6-hourly samples,nominally about t+5 days; historical release timestamp unknown,False,False,Retrospective reanalysis,https://www.ecmwf.int/en/era5-land
+relative_humidity_mean_t,ERA5-Land t2m/d2m,day t UTC; mean RH from matched samples,nominally about t+5 days; historical release timestamp unknown,False,False,Retrospective reanalysis,https://www.ecmwf.int/en/era5-land
+wind_speed_mean_t,ERA5-Land u10/v10,day t UTC; mean speed from four samples,nominally about t+5 days; historical release timestamp unknown,False,False,Retrospective reanalysis,https://www.ecmwf.int/en/era5-land
+rainfall_mm_t,CHIRPS v3 daily rnl,derived day t label,preliminary pentad-end+2 days; final typically following month week 3; local product stage unverified,False,False,Pentad total partitioned by ERA5 daily precipitation,https://www.chc.ucsb.edu/data/chirps3

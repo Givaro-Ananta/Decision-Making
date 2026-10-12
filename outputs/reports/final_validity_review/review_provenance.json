@@ -1,0 +1,35 @@
+{
+  "created_at_utc": "2026-10-10T17:26:37.335071+00:00",
+  "nasa_public_endpoint": "https://firms.modaps.eosdis.nasa.gov/api/missing_data?action=fetch_data",
+  "nasa_response_sha256": "c943c3e43a037bc4f6af3a0c70a967d5cdb174d0a563c667df5e4f63aca05a0d",
+  "nasa_response_rowCount": 163,
+  "parsed_product_entries": 177,
+  "local_raw_zero_days": 84,
+  "local_gap_days_listed_by_nasa": 78,
+  "may2026_standard_missing_days": 31,
+  "protected_files_verified_unchanged": 314,
+  "sources": {
+    "outputs/reports/firms_observation_coverage/audit_manifest.json": "250e74d66bc758fb4ebb67cb152f25d7cd7339bd720012df40bc33e3c4b7baa7",
+    "outputs/reports/firms_observation_coverage/daily_coverage_audit.csv": "b7dfeaefd704979138591dcf512a87645c7e9e59ba4141361aff20cccecfaa2d",
+    "outputs/reports/firms_observation_coverage/frozen_transition_impact.csv": "992e2a671f00ca5c2069951dcd1fc17fb78be3ca16fa3a7e42afc4daac8d229e",
+    "outputs/reports/final_test_050_3state/primary_confusion_matrix.csv": "c976d745f1175ce9a28539710ba394256fa68e5d0e7f45065d26480eeb255898",
+    "outputs/reports/final_test_050_3state/test_metrics.csv": "cd1c853ff616b751a82c56de5b8b44924cc999f036c3ba602fbc8cf6bc3198e1",
+    "configs/final_primary_050_3state.json": "76aeede512bf23cf538dcc69e1f7ecf15ca4e2471d9d38ad9cad2eb3669ce5e2",
+    "scripts/build_final_validity_review.py": "f25ebf0acb0f0c7ce5e97d05ba3239683457ec291242e684953a73718cc5be65"
+  },
+  "outputs_sha256": {
+    "nasa_missing_dates_response.json": "c943c3e43a037bc4f6af3a0c70a967d5cdb174d0a563c667df5e4f63aca05a0d",
+    "nasa_missing_dates.csv": "751f98674b48dcb6763e93161c2f565ce1a6df2b1cd0dc689d6c4308588fa138",
+    "firms_provider_crosscheck.csv": "8d99451bdacda529c64b0768b6c3562852b54757c9ece6ab7f394485a4b71a1f",
+    "predictor_availability_audit.csv": "b0db84abdf7fc689d358fda3e31eaeadb3913eb1f1f67ca286e53d6075981980",
+    "saved_confusion_arithmetic.csv": "400c0c2f2e86c3c163ffbf640c84ecdd82b0485740181f739a8dc302a51bd0bd",
+    "findings_and_solutions.csv": "06ea2177e8f97cf06b7b3bc2ba65dda797ef94d977671687efbc5c682439308c",
+    "final_validity_review.md": "0297f3246184aa0c58baf13e8e96702b2f785d6cf3b5584d9cd16f31100959c2"
+  },
+  "no_model_fitting_inference_or_primary_test_metric_recalculation": true,
+  "documentation_sha256": {
+    "README.md": "2408264464b9268cbb881095c40d832ec3a08280752bc7aa696aae6c1467c5d8",
+    "docs/final_validity_review.md": "0297f3246184aa0c58baf13e8e96702b2f785d6cf3b5584d9cd16f31100959c2",
+    "docs/history/README_week4_before_validity_review.md": "c0714caf1c8800087daa6cbadf4688cb03788d47da4dd42b3cd8451ee5900ed7"
+  }
+}

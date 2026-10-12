@@ -1,0 +1,614 @@
+% Canonical journal source. Compile with XeLaTeX, twice.
+% Initial migration preserves prior verified prose/results; edit this file directly.
+\documentclass[12pt,a4paper]{article}
+\usepackage[left=25mm,right=20mm,top=30mm,bottom=20mm,columnsep=5mm]{geometry}
+\usepackage{fontspec}
+\setmainfont{Garamond}
+\setsansfont{Arial}
+\setmonofont{Consolas}[Scale=0.78]
+\usepackage{amsmath}
+\usepackage{booktabs,tabularx}
+\usepackage[unicode,hidelinks,breaklinks]{hyperref}
+\hypersetup{pdftitle={Analisis Retrospektif Transisi State Intensitas Deteksi Hotspot di Sumatra},pdfauthor={Syahrialdi Rachim Akbar; Arya Muda Siregar; Givaro Ananta}}
+\urlstyle{same}
+\setlength{\parindent}{1em}
+\setlength{\parskip}{2pt}
+\setlength{\emergencystretch}{3em}
+\sloppy
+\clubpenalty=10000\widowpenalty=10000
+\hyphenpenalty=1800
+\Urlmuskip=0mu
+\expandafter\def\expandafter\UrlBreaks\expandafter{\UrlBreaks\do A\do B\do C\do D\do E\do F\do G\do H\do I\do J\do K\do L\do M\do N\do O\do P\do Q\do R\do S\do T\do U\do V\do W\do X\do Y\do Z\do a\do b\do c\do d\do e\do f\do g\do h\do i\do j\do k\do l\do m\do n\do o\do p\do q\do r\do s\do t\do u\do v\do w\do x\do y\do z\do 0\do 1\do 2\do 3\do 4\do 5\do 6\do 7\do 8\do 9}
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.18}
+\setlength{\textfloatsep}{12pt plus 2pt minus 2pt}
+\setlength{\dbltextfloatsep}{12pt plus 2pt minus 2pt}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\dbltopfraction}{0.9}
+\renewcommand{\textfraction}{0.08}
+\setcounter{topnumber}{3}
+\renewcommand{\tablename}{Tabel}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\makeatletter
+\setlength{\@dblfptop}{0pt}
+\setlength{\@dblfpsep}{18pt}
+\setlength{\@dblfpbot}{0pt plus 1fil}
+\renewcommand{\normalsize}{\@setfontsize\normalsize{12}{13.2}}
+\renewcommand{\section}{\@startsection{section}{1}{0pt}{-10pt plus -2pt minus -2pt}{5pt}{\normalfont\fontsize{14}{16}\selectfont\bfseries\raggedright}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0pt}{-8pt plus -2pt minus -2pt}{4pt}{\normalfont\normalsize\bfseries\raggedright}}
+\long\def\@makecaption#1#2{\vskip5pt{\small\raggedright\textbf{#1.} #2\par}\vskip5pt}
+\makeatother
+\begin{document}
+\begin{center}
+{\fontsize{18}{21}\selectfont\bfseries Analisis Retrospektif Transisi State Intensitas Deteksi Hotspot di Sumatra Menggunakan Model Markov Bergantung Kovariat Per Grid\par}
+\vspace{12pt}
+{\normalsize Syahrialdi Rachim Akbar, Arya Muda Siregar\textsuperscript{*}, Givaro Ananta\par}
+\vspace{4pt}
+{\small Program Studi Sains Data, Fakultas Sains, Institut Teknologi Sumatera,\par}
+{\small Kabupaten Lampung Selatan, Indonesia\par}
+\vspace{4pt}
+{\small \textsuperscript{*}Penulis korespondensi: \href{mailto:arya.123450063@student.itera.ac.id}{arya.123450063@student.itera.ac.id}\par}
+\vspace{8pt}
+
+\end{center}
+
+
+\section*{Abstrak}
+
+{\fontsize{10}{12}\selectfont\itshape\noindent \textbf{Latar belakang:} Intensitas deteksi hotspot berubah dari hari ke hari. \textbf{Tujuan:} Penelitian ini menganalisis secara retrospektif probabilitas transisi harian state intensitas deteksi hotspot pada grid eligible di daratan utama Sumatra. \textbf{Metode:} State dibentuk dari keberadaan deteksi yang dipertahankan dan agregasi Fire Radiative Power (FRP), dengan tiga kategori: tanpa deteksi, aktif non-high, dan aktif High. Dukungan spasial terdiri atas 187 grid berukuran 0,5\textdegree{}, dengan 46 grid memenuhi kriteria estimabilitas berbasis training. Model menggunakan state saat ini dan empat kovariat historis: suhu, kelembapan relatif, kecepatan angin, dan curah hujan. Audit kualitas observasi diikuti penanganan konservatif terhadap tanggal unavailable, unknown, atau partial; transisi hanya dipakai apabila kedua endpoint layak dan prediktor origin tersedia. Analisis revisi memakai 104.144 transisi training, 31.096 validation, dan 23.690 test. \textbf{Hasil:} Pada test bertarget 1 Januari 2025 sampai 31 Agustus 2026, model menghasilkan accuracy 0,859645, balanced accuracy 0,439182, macro-F1 0,452202, log loss 0,413996, dan Brier multiclass 0,216376. Baseline frekuensi transisi training pada baris test yang sama menghasilkan log loss 0,444941 dan Brier 0,229641. Model kovariat mempunyai skor probabilitas agregat lebih rendah, tetapi recall non-high hanya 4,55\% dan High 28,78\%. \textbf{Kesimpulan:} Temuan berlaku untuk subset proxy deteksi dan kohort yang dianalisis; belum membuktikan signifikansi perbedaan, kalibrasi, sebab-akibat, atau kesiapan prakiraan operasional. Evaluasi bersifat post-hoc karena periode test telah diperiksa sebelumnya.\par}
+
+\vspace{5pt}{\small\itshape\noindent \textbf{Kata kunci:} deteksi hotspot; transisi state; model Markov; Sumatra; analisis retrospektif.\par}
+
+\section*{Abstract}
+
+{\fontsize{10}{12}\selectfont\itshape\noindent \textbf{Background:} Thermal-detection intensity changes over time. \textbf{Objective:} This study retrospectively evaluates daily transitions in retained thermal-detection intensity across eligible grids in mainland Sumatra. \textbf{Method:} Three states represent no retained detection, active non-high intensity, and active high intensity based on aggregated fire radiative power. Of 187 study grids at 0.5-degree resolution, 46 met training-based estimability criteria. Independent covariate-dependent transition models use current state, temperature, relative humidity, wind speed, and rainfall. Dates classified as unavailable, unknown, or partial were conservatively masked, and transitions required usable observations at both endpoints. The revised analysis included 104,144 training, 31,096 validation, and 23,690 test transitions. \textbf{Results:} For test targets from 1 January 2025 to 31 August 2026, accuracy was 0.859645, balanced accuracy 0.439182, and macro-F1 0.452202. Covariate-model log loss and multiclass Brier score were 0.413996 and 0.216376, compared with 0.444941 and 0.229641 for training-only transition frequencies on identical rows. However, recall was only 4.55\% for non-high and 28.78\% for high activity. \textbf{Conclusion:} Lower aggregate probability scores support a bounded descriptive comparison, not statistical significance, calibration, causal effects, or operational forecasting. Results are conditional on the selected detection-proxy cohort and are post-hoc because the test period had previously been examined.\par}
+
+\vspace{5pt}{\small\itshape\noindent \textbf{Keywords:} hotspot detection; state transitions; Markov model; Sumatra; retrospective analysis.\par}
+
+\clearpage\twocolumn
+
+\section{Pendahuluan}
+
+Data deteksi termal dapat diringkas menjadi rangkaian state harian untuk mempelajari perubahan aktivitas yang tercatat dari satu hari ke hari berikutnya. Untuk penelitian ini, pertanyaan utamanya adalah apakah probabilitas perubahan state dapat direpresentasikan melalui state saat ini dan kovariat meteorologis historis pada masing-masing grid.
+
+
+Interpretasi tersebut memerlukan pembedaan antara tidak ada deteksi yang dipertahankan dan tidak tersedia pengamatan yang layak. Mengisi ketidaktersediaan data sebagai nol dapat membentuk target tanpa-deteksi yang tidak didukung bukti observasi. Karena itu, penelusuran sumber, aturan kualitas, dan konstruksi transisi merupakan bagian dari metode penelitian, bukan hanya pemeriksaan setelah model selesai.
+
+
+Penelitian dibatasi pada analisis retrospektif. Nilai kovariat yang mewakili suatu tanggal tidak selalu tersedia pada tanggal itu dalam alur operasional. Analisis ini tidak mengevaluasi penerbitan prakiraan, pembagian kapasitas patroli, atau dampak keputusan lapangan.
+
+
+\textbf{Penginderaan jauh dan konteks Indonesia.} Wooster et al. (2021) meninjau perkembangan, aplikasi, dan kebutuhan pengamatan active fire dari satelit. Rujukan tersebut memberi konteks produk observasi, bukan validasi langsung terhadap label penelitian ini. Tan et al. (2020) mengkaji hubungan hotspot dengan faktor spasial di Indonesia menggunakan model statistik, sedangkan Sakti et al. (2022) mengintegrasikan data spasial untuk prioritas mitigasi. Keduanya menunjukkan adanya penelitian terdahulu yang relevan di Indonesia; penelitian ini tidak mengklaim sebagai pemodelan kebakaran atau prioritisasi pertama. Target transisi state harian pada kohort terpilih dibedakan dari hubungan spasial dan prioritas mitigasi tersebut.
+
+
+\textbf{Probabilitas transisi dan kovariat.} Zakaria et al. (2019) membentuk probabilitas transisi dari frekuensi perpindahan state untuk analisis indeks pencemaran udara di Miri. Ini memberi contoh penggunaan Markov pada variabel lingkungan, tetapi bukan bukti validitas target deteksi termal. Klappstein et al. (2023) memasukkan kovariat pada probabilitas transisi melalui multinomial logit dalam HMM untuk perilaku satwa. Struktur link tersebut relevan secara metodologis, tetapi penelitian ini menggunakan state yang ditentukan dari observasi, bukan state laten; tidak mengimplementasikan HMM-SSF atau mengadopsi seluruh estimasi artikel itu.
+
+
+\textbf{Kecukupan asumsi.} Abstrak Albert-Green et al. (2014) melaporkan bahwa model Markov homogen tidak memadai secara keseluruhan untuk sojourn times FWI yang mereka kaji. Temuan pada FWI Ontario tidak membuktikan model penelitian ini salah, tetapi mendukung perlunya membedakan penggunaan asumsi Markov dari validasinya. Penelitian ini belum menguji kecukupan asumsi tersebut.
+
+
+Pembahasan confidence Tan et al. (2020) dibaca bersama corrigendum (2021); perbedaan threshold studi itu tidak disamakan dengan kategori confidence VIIRS yang digunakan di sini.
+
+
+Penelitian menjawab tiga pertanyaan:
+
+
+\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+
+\item Bagaimana membentuk transisi state deteksi harian dengan penanganan eksplisit atas observasi yang kualitasnya tidak memadai?
+
+\item Bagaimana kinerja probabilitas dan klasifikasi model Markov bergantung kovariat pada kohort grid yang memenuhi kriteria training?
+
+\item Apakah skor probabilitas model kovariat lebih rendah daripada model transisi sederhana pada baris evaluasi yang identik?
+
+\end{enumerate}
+
+Tujuannya adalah menghasilkan analisis transisi yang dapat ditelusuri, mengukur kinerja tanpa menyamakan accuracy dengan keberhasilan seluruh kelas, dan menyediakan pembanding sederhana. Kontribusi yang diklaim adalah penerapan serta evaluasi empiris pada data/kohort ini; tidak ada klaim metode baru atau studi pertama.
+
+
+Unit analisis adalah transisi grid-hari dengan target tepat satu hari setelah origin. Target merepresentasikan intensitas deteksi termal yang dipertahankan, bukan kejadian api yang telah dikonfirmasi di lapangan, luas terbakar, atau tingkat kerusakan. Kesimpulan tidak digeneralisasi otomatis ke semua grid Sumatra, seluruh tanggal, atau semua sumber termal.
+
+
+Penelitian ini mengevaluasi transisi state deteksi harian pada kohort eligible dengan kualitas observasi eksplisit dan pembanding frekuensi transisi training pada baris identik. Fokus tersebut berbeda dari pemetaan hubungan spasial atau prioritas mitigasi. Kontribusi dinilai dari evaluasi empiris pada data yang dianalisis, tanpa klaim sebagai metode pertama atau terbaik secara umum.
+
+
+\section{Metode penelitian}
+
+\subsection{Sumber dan dukungan spasial-temporal}
+
+\begin{table}[!htbp]
+
+\centering
+
+\caption{Sumber data dan penggunaannya}\label{tab:1}
+
+\fontsize{9.5}{11.5}\selectfont
+
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{.31\columnwidth}Y@{}}
+
+\toprule
+
+\textbf{Komponen} & \textbf{Penggunaan dalam penelitian} \\
+
+\midrule
+
+FIRMS VIIRS SNPP Collection 2, archive dan NRT & Deteksi dengan confidence nominal/high, siang dan malam; dasar count dan agregasi FRP \\
+
+ERA5-Land, sampel enam-jam & Suhu, dewpoint untuk kelembapan relatif, dan angin \\
+
+CHIRPS v3.0rnl harian & Curah hujan \\
+
+Geometri studi & Grid reguler 0,5\textdegree{} pada irisan daratan utama Sumatra dan extent sumber yang diverifikasi \\
+
+WorldCover & Konteks/audit preprocessing; bukan prediktor model akhir \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+Dukungan studi terdiri atas 187 grid, dengan origin barat 94,95\textdegree{} dan utara 6,05\textdegree{}. Periode panel sumber adalah 22 September 2016 sampai 31 Agustus 2026. Kohort analisis terdiri atas 46 kandidat historis yang seluruhnya lolos screening ulang menggunakan training. Proporsi 46 dari 187 merupakan proporsi jumlah grid, bukan proporsi luas daratan ataupun ukuran representativitas geografis.
+
+
+Penelusuran sumber data dan rekonstruksi tahapan pengolahan digunakan untuk memastikan konsistensi pembentukan panel, prediktor, dan label. Pemeriksaan ini menilai konsistensi input analisis, bukan membuktikan kelengkapan observasi satelit di seluruh lokasi.
+
+
+Dokumentasi produk NASA membedakan deteksi VIIRS S-NPP Collection 2 NRT \path{VNP14IMGTDL_NRT} dari data hasil pemrosesan standard. DOI produk NRT adalah \path{10.5067/FIRMS/VIIRS/VNP14IMGT_NRT.002}; identifier ini tidak dipakai untuk menyatakan seluruh ekspor historis berasal dari satu versi NRT. Dokumentasi yang sama mendefinisikan confidence nominal/high dan FRP dalam MW. Dengan demikian, jumlah FRP pada satu grid-hari adalah ringkasan daya yang tercatat pada deteksi yang dipertahankan, bukan integral energi sepanjang hari (National Aeronautics and Space Administration [NASA], 2024). Pembedaan archive dan NRT mengikuti layanan FIRMS (NASA, n.d.).
+
+
+ERA5-Land merupakan sumber reanalysis meteorologi (Muñoz-Sabater, 2019; Muñoz-Sabater et al., 2021). Empat waktu pengamatan per hari digunakan dalam analisis, bukan seluruh pengamatan hourly. Curah hujan berasal dari CHIRPS versi 3 (Funk et al., 2026). Pada varian daily rnl, ERA5 digunakan untuk membagi total pentadal menjadi nilai harian. Label tanggalnya tidak menjamin jendela hari lokal yang sama pada seluruh sumber stasiun (Climate Hazards Center [CHC], n.d.). Oleh karena itu, keselarasan waktu antarproduk merupakan batas interpretasi data harian.
+
+
+Rekonstruksi kovariat mempertahankan urutan agregasi spasial. Nilai meteorologi pada base-cell 0,1\textdegree{} diringkas sebelum penggabungan ke dukungan grid studi. Bobot luas daratan berasal dari irisan geometri dengan proyeksi equal-area EPSG:6933. Untuk CHIRPS, keanggotaan pusat piksel dalam poligon menentukan nilai yang masuk sebelum agregasi berbobot. Ini menjelaskan mengapa rerata seluruh piksel dalam bounding box tidak dapat dipakai sebagai pengganti tanpa mengubah definisi fitur. Resolusi grid 0,5\textdegree{} merupakan unit analisis, sedangkan resolusi produk dan base-cell merupakan dukungan pengolahan yang berbeda. Rekonstruksi mempertahankan aturan kelengkapan dan tidak mengimputasi nilai meteorologi yang hilang.
+
+
+\subsection{Definisi state dan kovariat}
+
+Untuk grid g dan hari t yang provisionally usable, state S(g,t) ditentukan sebagai berikut:
+
+
+\begin{table}[!htbp]
+
+\centering
+
+\caption{Definisi state intensitas deteksi}\label{tab:2}
+
+\fontsize{9.5}{11.5}\selectfont
+
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{.29\columnwidth}Y@{}}
+
+\toprule
+
+\textbf{State} & \textbf{Definisi} \\
+
+\midrule
+
+0 : tanpa deteksi & Tidak ada deteksi yang dipertahankan pada hari yang layak menurut kebijakan proxy ekspor \\
+
+1 : aktif non-high & Terdapat deteksi dan jumlah FRP < 16,84 MW \\
+
+2 : aktif High & Terdapat deteksi dan jumlah FRP \ensuremath{\geq} 16,84 MW \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+Ambang merupakan kuartil ke-75 agregasi FRP pada hari-grid aktif training di seluruh dukungan studi, sebelum filter prediktor dan eligibility. Setelah masking konservatif, populasi aktif training berubah dari 41.545 menjadi 41.254 hari-grid, sementara hasil kuartil tetap 16,84 MW. Ambang dihitung ulang; tidak dipaksakan tetap agar skor tidak berubah. High menunjukkan kategori FRP deteksi, bukan severity kebakaran atau energi harian terintegrasi.
+
+
+Empat prediktor pada waktu asal \(t\) adalah suhu, kelembapan relatif, kecepatan angin, dan curah hujan. Fitur suhu merupakan rerata spasial maksimum base-cell dari empat sampel enam-jam, bukan maksimum dari seluruh pengamatan hourly dalam sehari. Kelembapan relatif dihitung dari pasangan suhu dan dewpoint pada setiap waktu sebelum dirata-ratakan. Angin menggunakan rerata kecepatan; hujan berasal dari CHIRPS. ERA5 mengikuti waktu valid UTC, sedangkan CHIRPS mengikuti label tanggal produk. Definisi ini tidak menjamin keselarasan dengan hari lokal atau ketersediaan real-time.
+
+
+\subsection{Kualitas observasi dan gap Mei}
+
+Pemeriksaan kualitas observasi mencakup 3.631 tanggal: 3.472 dinilai layak sementara (provisionally usable), 84 tidak tersedia (unavailable), 73 belum dapat dipastikan (unknown), dan dua tidak lengkap (partial). Kebijakan konservatif memperlakukan jumlah deteksi, FRP, dan state pada tanggal yang tidak layak sebagai nilai tidak tersedia, bukan nol. Nilai sebelum penyaringan dipertahankan untuk perbandingan historis. Status usable tidak menjamin setiap grid memiliki peluang observasi yang lengkap.
+
+
+Inventory NASA yang diperiksa dalam audit mencantumkan seluruh tanggal Mei 2026 sebagai missing untuk produk standard SNPP. Temuan ini tidak berarti instrumen mati selama satu bulan, tidak membuktikan gap pada semua produk, dan tidak membenarkan pengisian nol. NASA dan data penelitian berada pada rantai sumber yang terkait, sehingga kesesuaian gap bukan validasi independen terhadap kondisi api. Data NRT, kemungkinan backfill, dan perbedaan produk tetap perlu dibedakan.
+
+
+Penelitian memilih analisis pada subset yang lolos aturan kualitas, tanpa mengimputasi api atau memulihkan seluruh gap. Pendekatan ini dapat membuang observasi yang sebenarnya valid atau telah diproses ulang; tanggal yang dikeluarkan tidak dinyatakan sebagai kesalahan observasi yang telah terbukti. Dasar klasifikasi tanggal dan ketidakpastiannya dipertahankan dalam pencatatan kualitas observasi.
+
+
+Aturan kualitas berlaku sebelum pembentukan label untuk analisis revisi. Tanggal unavailable tidak diberi state 0 hanya karena ekspornya kosong; tanggal unknown atau partial juga tidak diasumsikan setara dengan hari berobservasi lengkap. Sebaliknya, hari usable tanpa deteksi tetap dapat menghasilkan state 0 menurut definisi proxy yang dinyatakan. Pembedaan ini mencegah dua kondisi berbeda masuk sebagai target yang sama secara otomatis. Konsekuensinya, besaran yang dievaluasi adalah transisi pada tanggal yang dapat dipakai menurut kebijakan kualitas, bukan transisi pada seluruh kalender. Penelitian tidak mengestimasi apa yang sebenarnya terjadi pada tanggal yang dikeluarkan, sehingga exclusion merupakan pembatas domain analisis, bukan pemulihan ground truth.
+
+
+\subsection{Konstruksi transisi dan pembagian data}
+
+Kalender lengkap di-shift sebelum penyaringan. Transisi hanya digunakan apabila origin dan target berada pada grid yang sama, berjarak tepat satu hari, kedua endpoint usable, dan seluruh prediktor origin tersedia. Tidak dilakukan bridging melewati gap atau perpindahan antargrid. Prediktor target tidak disyaratkan karena tidak menjadi input model.
+
+
+Pembagian data mengikuti tanggal target, bukan tanggal origin:
+
+
+\begin{table}[!htbp]
+
+\centering
+
+\caption{Pembagian data berdasarkan tanggal target}\label{tab:3}
+
+\fontsize{9.5}{11.5}\selectfont
+
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}p{.22\columnwidth}Y@{}}
+
+\toprule
+
+\textbf{Split} & \textbf{Periode target} \\
+
+\midrule
+
+Training & Sampai 31 Desember 2022 \\
+
+Validation & 1 Januari 2023-31 Desember 2024 \\
+
+Test & 1 Januari 2025 sampai 31 Agustus 2026 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table}
+
+Dengan demikian, target 1 Januari dapat memakai state dan prediktor origin 31 Desember tahun sebelumnya. Training digunakan untuk threshold, eligibility, standardisasi, estimasi model, serta frekuensi baseline. Tidak ada tuning berdasarkan hasil test pada tahap revisi. Namun, karena hasil test historis telah diperiksa, seluruh evaluasi revisi dan pembanding tetap dinyatakan post-hoc.
+
+
+Urutan kalender dan penyaringan menentukan makna horizon analisis. Jika baris yang tidak layak dihapus sebelum shift, dua tanggal yang tidak berurutan dapat tampak sebagai tetangga pada tabel. Pemeriksaan selisih satu hari menghindari perubahan horizon tersebut. Pemeriksaan grid mencegah baris terakhir satu lokasi dihubungkan ke lokasi lain. Pemisahan berdasarkan tanggal target juga menjaga interpretasi metrik: setiap baris dihitung pada periode saat destination terjadi, meskipun origin berada pada batas periode sebelumnya. Penggunaan state origin pada batas tahun merupakan informasi sebelumnya yang sah dalam desain ini. Namun, kovariat historis tetap tidak disamakan dengan informasi yang tersedia secara operasional tepat pada origin.
+
+
+\subsection{Model Markov bergantung kovariat}
+
+Besaran yang dimodelkan adalah \[\Pr(S_{g,t+1}=j\mid S_{g,t}=i,\mathbf X_{g,t}).\] Untuk masing-masing grid g dan current-state i, digunakan multinomial logistic dengan satu kategori referensi. Pada parameterisasi tiga kelas, log rasio probabilitas terhadap kelas referensi merupakan fungsi linear kovariat yang distandardisasi dari training. Probabilitas diperoleh melalui normalisasi multinomial sehingga berjumlah satu.
+
+
+Struktur ini membatasi dependensi eksplisit pada state saat ini dan kovariat origin; tidak memasukkan state tetangga atau riwayat state tambahan. Penggunaan struktur tersebut merupakan asumsi pemodelan, bukan hasil pembuktian sifat Markov atau kestasioneran data.
+
+
+Secara formal, untuk parameterisasi dengan tiga destination, tuliskan prediktor linear kategori j sebagai \[\eta_j=\alpha_j+\boldsymbol{\beta}_j^{\mathsf T}\mathbf z,\]
+
+dengan kategori referensi mempunyai \(\eta=0\). Probabilitasnya adalah \[p_j=\frac{\exp(\eta_j)}{\sum_{k=0}^{2}\exp(\eta_k)}.\]
+
+Vektor z memuat kovariat yang distandardisasi memakai training pada kelompok yang bersangkutan. Indeks grid dan current-state tidak ditulis pada persamaan ringkas tersebut, tetapi setiap pasangan mempunyai parameter sendiri. Model ini menghasilkan satu distribusi destination untuk setiap transisi, bukan satu matriks transisi konstan untuk seluruh wilayah. Interpretasi koefisien, bila dilakukan, bersifat kondisional terhadap kelompok, definisi fitur dan kategori referensi; penelitian ini tidak melaporkan efek kausal koefisien.
+
+
+Standardisasi menjaga satuan numerik prediktor dalam estimasi, sedangkan screening memeriksa apakah data training mendukung parameterisasi yang dipakai. Keduanya mempunyai fungsi berbeda dari pengujian kinerja. Kelompok dengan ukuran sampel cukup masih dapat menghasilkan probabilitas yang kurang baik pada evaluasi; sebaliknya, skor evaluasi yang rendah tidak membuktikan seluruh koefisien stabil. Pemodelan independen juga tidak meminjam informasi dari grid lain ketika satu kelompok mempunyai sedikit transisi aktif. Penelitian mempertahankan desain ini untuk membatasi perubahan revisi pada penanganan kualitas observasi. Karena tidak ada estimasi ketidakpastian parameter yang diverifikasi dalam naskah ini, hasil optimizer dan information matrix diperlakukan sebagai pemeriksaan numerik, bukan jaminan ketepatan inferensial.
+
+
+Pemakaian multinomial logit untuk probabilitas transisi memiliki contoh metodologis pada Klappstein et al. (2023), Bagian \textit{Time-varying transition probabilities}, persamaan 9-10. Perbedaannya tetap penting: state penelitian ini dibentuk dari deteksi/FRP, sedangkan state pada artikel tersebut laten. Artikel itu tidak memvalidasi screening, pilihan threshold FRP, atau hasil numerik penelitian.
+
+
+Sebanyak 138 kelompok model dibentuk dari 46 grid \ensuremath{\times} tiga current-state. Estimasi dilakukan secara independen, unweighted dan unpenalized, dengan likelihood multinomial dan optimizer L-BFGS-B. Kriteria screening training mencakup minimum 50 transisi per current-state, minimum 10 observasi per destination yang teramati untuk regresi, minimum lima observasi per parameter bebas, full rank, VIF \ensuremath{\leq} 10, condition number \ensuremath{\leq} 10\ensuremath{^{8}}, serta pemeriksaan separation. Kelompok single-destination dapat deterministik. Seleksi fitur konstan/near-constant dan standardisasi hanya memakai training.
+
+
+Perubahan transisi training akibat aturan kualitas memerlukan estimasi ulang dengan keluarga model yang sama. Seluruh 46 kandidat tetap lolos dan semua 138 fit memenuhi kriteria optimizer, gradient, dan information matrix yang dipertahankan. Tidak dilakukan perluasan arsitektur, weighting, regularisasi, atau pemilihan ulang threshold keputusan. Kelulusan numerik tidak membuktikan stabilitas inferensial.
+
+
+\subsection{Baseline transisi sederhana}
+
+Baseline mengestimasi probabilitas destination sebagai frekuensi transisi training untuk setiap pasangan grid/current-state:
+
+
+\[\widehat p_{\mathrm{base}}(j\mid g,i)=\frac{n_{gij}}{\sum_{k=0}^{2}n_{gik}}.\]
+
+
+Baseline memakai 104.144 transisi corrected training dalam 138 kelompok, tanpa kovariat, smoothing, pooling, atau label evaluasi. Kebijakan ditetapkan sebelum penghitungan skor. Destination yang tidak teramati diberi probabilitas nol; jika kemudian menjadi actual, log loss dilaporkan tak hingga tanpa clipping. Denominator nol atau kelompok yang tidak ditemukan menghentikan evaluasi. Pada validation/test yang dianalisis tidak terdapat actual berprobabilitas nol pada kedua model.
+
+
+Perbandingan menggunakan probabilitas model kovariat yang sudah dihitung, tanpa estimasi ulang pada tahap perbandingan baseline. Identitas grid, tanggal, current-state, destination aktual, dan baris evaluasi sama persis. Aturan baseline ditetapkan sebelum penghitungan skor pembanding, menggunakan jumlah transisi training sebagai pembilang dan total transisi pada kelompok yang sama sebagai penyebut.
+
+
+Pembanding tersebut menjawab pertanyaan yang terbatas: apakah penambahan kovariat dalam model yang dievaluasi berkaitan dengan skor yang lebih rendah daripada penggunaan frekuensi training untuk pasangan grid/current-state yang sama? Pembanding tetap mengetahui lokasi dan state origin, sehingga bukan sekadar frekuensi kelas global. Ia tidak menggunakan suhu, kelembapan, angin atau hujan pada baris evaluasi. Penyamaan baris menghindari perbedaan skor yang hanya muncul karena satu model dievaluasi pada hari yang lebih mudah. Namun, satu baseline tanpa smoothing belum mencakup seluruh pembanding yang mungkin. Hasil tidak menetapkan apakah pilihan smoothing atau model terpool akan lebih baik; pertanyaan tersebut berada di luar perbandingan yang dilakukan.
+
+
+\subsection{Ukuran evaluasi}
+
+Klasifikasi utama memakai argmax probabilitas, dengan tie mengikuti kelas pertama. Accuracy, balanced accuracy, macro-F1, dan precision/recall/F1 per kelas dilaporkan agar kinerja kelas dominan tidak menutupi kelas aktif. AUC dihitung one-vs-rest secara pooled; bukan evaluasi ranking harian antargrid.
+
+
+Log loss adalah rerata negatif log probabilitas kelas actual. Brier multiclass adalah rerata jumlah squared error antara tiga probabilitas dan indikator one-hot kelas actual; tidak dibagi tiga. Nilai lebih rendah berarti skor probabilitas lebih baik. Keduanya dibandingkan pada baris identik, secara agregat dan per grid. Test dipisahkan menjadi tahun 2025 penuh dan Januari-Agustus 2026 untuk deskripsi, tanpa mengasumsikan perbedaan tahunan sebagai drift.
+
+
+Dengan indeks baris r dan label actual y, definisi komputasionalnya adalah\[\mathrm{LL}=-\frac{1}{N}\sum_{r=1}^{N}\ln p_{r,y_r}.\]
+
+dan \[\mathrm{BS}=\frac{1}{N}\sum_{r=1}^{N}\sum_{j=0}^{2}\bigl(p_{r,j}-\mathbf{1}\{y_r=j\}\bigr)^2.\]
+
+Logaritma menggunakan basis natural. Definisi ini mengikuti loss, yaitu tanda negatif dari scoring rule yang dimaksimalkan dalam konvensi Gneiting dan Raftery (2007, Bagian 3). Konvensi tanda dan normalisasi perlu dinyatakan saat membandingkan angka lintas penelitian. Proper scoring rules menilai distribusi probabilitas, bukan hanya kelas dengan probabilitas terbesar. Karena itu, skor lebih rendah pada sampel ini tidak dengan sendirinya membuktikan kalibrasi, signifikansi selisih, atau manfaat suatu keputusan lapangan.
+
+
+Ringkasan pooled memberi bobot yang sama kepada setiap transisi yang dipertahankan. Grid yang menyumbang lebih banyak baris dengan demikian mempunyai bobot lebih besar daripada grid dengan sedikit baris; ringkasan ini tidak sama dengan rerata sederhana skor 46 grid. Analisis per grid digunakan untuk memeriksa apakah arah perbandingan konsisten, bukan untuk mengubah bobot setelah hasil terlihat. Support, confusion matrix dan recall tetap disertakan karena skor probabilitas agregat dapat membaik tanpa perubahan yang memadai pada identifikasi kelas aktif. Tidak ada threshold baru, pengubahan distribusi kelas, atau pemilihan metrik berdasarkan arah hasil yang ditambahkan pada tahap penyusunan artikel.
+
+
+\section{Hasil}
+
+\subsection{Rekonsiliasi sampel}
+
+Tabel~\ref{tab:4} merangkum jumlah transisi sebelum dan sesudah penyaringan kualitas observasi. Periode target mengikuti Bagian 2.4. Jumlah awal sudah mengecualikan prediktor pada waktu asal yang tidak tersedia.
+
+
+\begin{table*}[!htbp]
+
+\centering
+
+\caption{Rekonsiliasi jumlah transisi sebelum dan sesudah masking}\label{tab:4}
+
+\fontsize{9.5}{11.5}\selectfont
+
+\begin{tabularx}{\textwidth}{@{}lYYYY@{}}
+
+\toprule
+
+\textbf{Split} & \textbf{Historis dengan prediktor tersedia} & \textbf{Exclusion kualitas konservatif} & \textbf{Drop screening grid} & \textbf{Dipakai pada revisi} \\
+
+\midrule
+
+Training & 105.340 & 1.196 & 0 & 104.144 \\
+
+Validation & 33.626 & 2.530 & 0 & 31.096 \\
+
+Test & 27.968 & 4.278 & 0 & 23.690 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table*}
+
+Sebanyak 4.278 transisi test dikeluarkan berdasarkan gabungan kualitas kedua endpoint, bukan karena semua target terbukti salah. Jumlah ini berbeda dari 2.392 transisi historis yang menyentuh gap ekspor kosong murni; keduanya mempunyai definisi berbeda. Pada kalender kandidat training, 46 origin tanpa rainfall sudah dikeluarkan secara historis. Raster CHIRPS 23 September 2016 yang terpotong tidak diperbaiki atau diimputasi.
+
+
+\subsection{Kinerja model kovariat}
+
+Tabel~\ref{tab:5} menyajikan kinerja model pada 46 grid. Validation bertarget 2023--2024; test bertarget 1 Januari 2025 sampai 31 Agustus 2026. Desimal menggunakan koma dan jumlah baris menggunakan pemisah ribuan titik.
+
+
+\begin{table*}[!htbp]
+
+\centering
+
+\caption{Kinerja model kovariat pada validation dan test}\label{tab:5}
+
+\fontsize{9.5}{11.5}\selectfont
+
+\begin{tabularx}{\textwidth}{@{}lrrrrrrr@{}}
+
+\toprule
+
+\textbf{Split} & \textbf{N} & \textbf{Accuracy} & \shortstack{\textbf{Balanced}\\\textbf{accuracy}} & \textbf{Macro-F1} & \textbf{Weighted-F1} & \textbf{Log loss} & \textbf{Brier} \\
+
+\midrule
+
+Validation & 31.096 & 0,851910 & 0,477503 & 0,487655 & 0,812935 & 0,421786 & 0,224293 \\
+
+Test & 23.690 & 0,859645 & 0,439182 & 0,452202 & 0,819313 & 0,413996 & 0,216376 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table*}
+
+Tabel~\ref{tab:6} menunjukkan metrik per kelas pada kohort dan periode test yang sama.
+
+
+\begin{table*}[!htbp]
+
+\centering
+
+\caption{Metrik per kelas pada test}\label{tab:6}
+
+\fontsize{9.5}{11.5}\selectfont
+
+\begin{tabularx}{\textwidth}{@{}lrrrrr@{}}
+
+\toprule
+
+\textbf{State} & \textbf{Support} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{AUC one-vs-rest} \\
+
+\midrule
+
+0 : tanpa deteksi & 20.262 & 0,881381 & 0,984256 & 0,929982 & 0,810972 \\
+
+1 : aktif non-high & 2.330 & 0,310850 & 0,045494 & 0,079371 & 0,740922 \\
+
+2 : aktif High & 1.098 & 0,437673 & 0,287796 & 0,347253 & 0,865029 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table*}
+
+Tabel~\ref{tab:7} menyajikan confusion matrix pada kohort dan periode test yang sama. Baris menunjukkan kelas aktual dan kolom menunjukkan kelas hasil argmax probabilitas.
+
+
+\begin{table*}[!htbp]
+
+\centering
+
+\caption{Confusion matrix test, baris actual dan kolom prediksi}\label{tab:7}
+
+\fontsize{9.5}{11.5}\selectfont
+
+\begin{tabularx}{\textwidth}{@{}lrrrr@{}}
+
+\toprule
+
+\textbf{Actual} & \textbf{Prediksi 0} & \textbf{Prediksi 1} & \textbf{Prediksi 2} & \textbf{Support} \\
+
+\midrule
+
+0 & 19.943 & 136 & 183 & 20.262 \\
+
+1 & 2.001 & 106 & 223 & 2.330 \\
+
+2 & 683 & 99 & 316 & 1.098 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table*}
+
+Accuracy tinggi terutama berjalan bersama recall kelas 0 yang tinggi. Argmax hanya mengenali 106 dari 2.330 target non-high dan 316 dari 1.098 target High. Karena itu, model tidak dinyatakan berhasil memulihkan seluruh kelas aktif hanya berdasarkan accuracy.
+
+
+\subsection{Perbandingan probabilitas dengan baseline}
+
+Tabel~\ref{tab:8} membandingkan model kovariat dan baseline frekuensi transisi training pada baris evaluasi yang identik.
+
+
+\begin{table*}[!htbp]
+
+\centering
+
+\caption{Perbandingan skor probabilitas pada baris identik}\label{tab:8}
+
+\fontsize{9.5}{11.5}\selectfont
+
+\begin{tabularx}{\textwidth}{@{}Yrrrrr@{}}
+
+\toprule
+
+\textbf{Target periode} & \textbf{N} & \shortstack{\textbf{Log loss}\\\textbf{baseline}} & \shortstack{\textbf{Log loss}\\\textbf{kovariat}} & \shortstack{\textbf{Brier}\\\textbf{baseline}} & \shortstack{\textbf{Brier}\\\textbf{kovariat}} \\
+
+\midrule
+
+Validation 2023-2024 & 31.096 & 0,458428 & 0,421786 & 0,239597 & 0,224293 \\
+
+Test 2025-01-01 s.d. 2026-08-31 & 23.690 & 0,444941 & 0,413996 & 0,229641 & 0,216376 \\
+
+Test 2025 penuh & 16.100 & 0,429737 & 0,402230 & 0,218787 & 0,207277 \\
+
+Test Januari-Agustus 2026 & 7.590 & 0,477192 & 0,438954 & 0,252666 & 0,235678 \\
+
+\bottomrule
+
+\end{tabularx}
+
+\end{table*}
+
+Pada test keseluruhan, delta kovariat minus baseline adalah \ensuremath{-}0,030945 untuk log loss dan \ensuremath{-}0,013265 untuk Brier. Kedua skor agregat juga lebih rendah pada validation dan masing-masing subset tahun. Rerata subset tahunan dibobot jumlah baris dan direkonsiliasi ke keseluruhan test.
+
+
+Hasil per grid tidak seragam. Log loss kovariat lebih rendah pada 43 dari 46 grid dan Brier pada 40 dari 46 grid untuk test keseluruhan. Pada 2025 angkanya 42 dan 43 grid; pada Januari-Agustus 2026, 34 dan 30 grid. Validation menunjukkan skor lebih rendah pada 44 grid untuk masing-masing metrik. Perbedaan ini membatasi klaim keunggulan yang berlaku universal.
+
+
+\subsection{Batas perbandingan sebelum dan sesudah penyaringan}
+
+Analisis sebelum penyaringan kualitas observasi mencakup 27.968 transisi test. Analisis setelah penyaringan memakai training dan baris evaluasi yang berbeda. Oleh karena itu, perubahan metrik antara kedua analisis tidak diinterpretasikan sebagai efek kausal penyaringan atau peningkatan kinerja model. Kesimpulan komparatif dalam penelitian ini hanya didasarkan pada perbandingan model kovariat dan baseline pada baris yang sama.
+
+
+
+
+
+\section{Pembahasan}
+
+\subsection{Nilai tambah model kovariat dalam lingkup evaluasi}
+
+Perbandingan dengan model yang hanya memakai frekuensi transisi menunjukkan skor probabilitas agregat yang lebih baik ketika kovariat dimasukkan dalam model pada data evaluasi ini. Bukti tersebut lebih relevan untuk menilai manfaat komparatif daripada kelulusan screening atau keberhasilan optimizer saja.
+
+
+Namun, perbandingan bersifat deskriptif dan post-hoc. Tidak ada interval ketidakpastian atau pengujian signifikansi yang telah diverifikasi. Korelasi temporal/spasial, pemilihan grid eligible, dan exclusion observasi membatasi generalisasi. Hasil tidak membuktikan kovariat menyebabkan perubahan aktivitas, tidak membandingkan seluruh alternatif baseline atau smoothing, dan tidak menetapkan model terbaik secara umum.
+
+
+\subsection{Skor probabilitas dan kelemahan klasifikasi aktif}
+
+Log loss/Brier yang lebih rendah tidak menghilangkan recall kelas aktif yang rendah. Skor probabilitas menilai distribusi probabilitas, sedangkan recall argmax menilai keputusan kelas dengan aturan tertentu. Keduanya perlu dibaca bersama: model relatif lebih baik daripada baseline dalam skor agregat, tetapi masih sering mengklasifikasikan target aktif sebagai state 0.
+
+
+Penelitian tidak mengubah threshold berdasarkan test untuk memperbaiki recall setelah melihat hasil. Perubahan aturan keputusan membutuhkan tujuan, biaya kesalahan, dan protokol evaluasi yang berbeda. Dalam ruang lingkup saat ini, kelemahan tersebut dilaporkan sebagai batas hasil.
+
+
+\subsection{Dampak missing data dan pemilihan kohort}
+
+Masking mencegah tanggal yang ditandai non-usable secara otomatis dianggap sebagai nol. Hal ini memperbaiki konsistensi target dengan bukti kualitas yang tersedia, tetapi tidak mengukur bias akibat missingness. Missingness tidak diasumsikan acak dan performa untuk tanggal yang dikeluarkan tidak diestimasi.
+
+
+Kesamaan gap NASA dan penelitian mendukung penelusuran produk, bukan validitas ground truth. Pemulihan atau reinstatement tanggal memerlukan bukti produk/QA baru. Demikian pula, model hanya dievaluasi pada 46 grid yang memenuhi screen, sehingga keberhasilan pada kohort ini tidak mewakili semua 187 grid atau seluruh wilayah Sumatra.
+
+
+Pemilihan kohort dan masking menangani dua persoalan yang berbeda. Screening menyatakan kelompok training mana yang mendukung estimasi model; masking menyatakan tanggal mana yang boleh membentuk endpoint menurut bukti kualitas. Keberhasilan seluruh kandidat setelah screening ulang tidak menghapus seleksi awal kohort. Demikian pula, ketersediaan prediktor pada satu hari tidak membuktikan deteksi termalnya lengkap. Hasil penelitian harus dibaca bersyarat pada kedua proses seleksi tersebut. Menyamakan kohort eligible dengan seluruh wilayah dapat menutupi lokasi yang jarang aktif atau sulit diestimasi, sedangkan menyamakan hari usable dengan observasi sempurna dapat menutupi kesalahan deteksi yang belum dapat diukur.
+
+
+\subsection{Batas interpretasi tahunan dan operasional}
+
+Skor Januari-Agustus 2026 lebih tinggi daripada 2025 untuk kedua model, tetapi perbedaan panjang periode, musim, distribusi kelas, serta exclusions tidak dipisahkan efeknya. Karena itu, perubahan tersebut tidak disebut bukti drift atau penurunan struktural model.
+
+
+Kovariat reanalysis dan curah hujan historis tidak diperlakukan sebagai data yang pasti tersedia saat keputusan harian dibuat. Tidak ada validasi as-of availability, penerbitan prakiraan, kapasitas tindakan, atau manfaat lapangan. Penelitian ini tetap merupakan analisis retrospektif state deteksi.
+
+
+Penggunaan CHIRPS daily \path{rnl} juga berarti prediktor hujan tidak sepenuhnya terpisah dari keluarga reanalysis yang mendukung kovariat meteorologi lain (CHC, n.d.). Keterkaitan sumber ini tidak membuktikan kolinearitas berbahaya atau leakage; screening yang dilakukan tetap merupakan bukti numerik yang tersedia. Akan tetapi, penelitian tidak menafsirkan empat prediktor sebagai empat pengukuran lapangan yang independen. Demikian pula, hasil Sakti et al. (2022) tentang prioritas mitigasi dan Tan et al. (2020) tentang hubungan spasial tidak dapat dibandingkan sebagai leaderboard angka accuracy dengan hasil transisi ini. Target, unit analisis dan protokol evaluasinya berbeda. Rujukan tersebut membantu menetapkan konteks dan batas kontribusi, bukan membuktikan model penelitian lebih unggul.
+
+
+\subsection{Keterbatasan}
+
+\begin{enumerate}\setlength{\itemsep}{2pt}\setlength{\parskip}{0pt}
+
+\item \textbf{Peluang observasi belum disertifikasi per grid.} Usable bukan bukti semua lokasi teramati atau state 0 berarti tidak ada api. Cloud/overpass, kelengkapan ekspor, backfill/reprocessing, serta batas pemulihan Fairbanks setelah interval minimum yang ditinjau belum dituntaskan.
+
+\item \textbf{Kebijakan konservatif dapat mengecualikan pengamatan valid.} Hasil hanya berlaku pada subset yang dipakai; tidak ada estimasi bias atau performa pada tanggal excluded.
+
+\item \textbf{State merupakan proxy deteksi termal.} Komposisi sumber termal pada geometri akhir belum sepenuhnya tervalidasi; FRP tidak diinterpretasikan sebagai kerusakan atau luas terbakar.
+
+\item \textbf{Kohort terpilih dan model independen membatasi cakupan.} Representativitas seluruh wilayah, dependensi spasial, kecukupan asumsi Markov, serta kestabilan parameter belum dibuktikan oleh screening numerik.
+
+\item \textbf{Test telah dilihat sebelumnya.} Hasil revisi dan baseline tidak memiliki status untouched confirmatory evaluation. Signifikansi perbedaan dan kalibrasi kondisional belum diverifikasi.
+
+\item \textbf{Reproduksibilitas analisis awal terbatas.} Rekonstruksi input dan konsistensi prediksi tidak menjamin kesamaan seluruh objek model, hasil antara, atau versi dependensi pada analisis sebelum penyaringan. Rekonstruksi tersebut tidak diperlakukan sebagai reproduksi identik analisis awal.
+
+\item \textbf{Kesiapan operasional di luar lingkup.} Tidak tersedia evaluasi prospective/as-of, keputusan patroli, atau dampak tindakan lapangan.
+
+\end{enumerate}
+
+\section{Kesimpulan}
+
+Penelitian menghasilkan analisis transisi state intensitas deteksi yang dapat ditelusuri pada kohort eligible dengan penanganan eksplisit atas observasi berkualitas tidak memadai. Perubahan training ditangani melalui same-family refit, sementara aturan target, fitur, screening, dan keputusan utama dipertahankan tanpa tuning test.
+
+
+Pada 23.690 transisi test bertarget 1 Januari 2025 sampai 31 Agustus 2026, model kovariat mempunyai log loss dan Brier agregat lebih rendah daripada baseline frekuensi transisi training pada baris yang identik. Hasil tersebut mendukung manfaat komparatif terbatas pada skor, baseline, periode, dan kohort yang dievaluasi. Recall kelas aktif tetap rendah; tidak ada dasar untuk menyatakan model siap sebagai prakiraan atau sistem patroli.
+
+
+\section*{Ketersediaan data dan kode}
+
+Data observasi bersumber dari FIRMS, ERA5-Land, dan CHIRPS sebagaimana dijelaskan pada metode dan daftar pustaka. Paket lengkap yang mencakup data olahan, kode analisis, model terlatih, dan lingkungan komputasi belum disertai tautan arsip publik dalam naskah ini. Kondisi ini membatasi reproduksi independen seluruh hasil. Akses terhadap produk sumber tidak dengan sendirinya menjamin reproduksi tahapan pengolahan dan pemodelan.
+
+
+\section*{Pengungkapan penggunaan AI}
+
+OpenAI Codex digunakan untuk membantu penyuntingan bahasa, penataan naskah, dan pemeriksaan konsistensi angka terhadap keluaran analisis. Penggunaan alat tersebut tidak menggantikan tanggung jawab penulis atas metode, interpretasi, sitasi, dan verifikasi akhir naskah.
+
+
+\section*{Daftar pustaka}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Albert-Green, A., Braun, W. J., Martell, D. L., \& Woolford, D. G. (2014). Visualization tools for assessing the Markov property: sojourn times in the forest Fire Weather Index in Ontario. \textit{Environmetrics, 25}(6), 417-430. \url{https://doi.org/10.1002/env.2237}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Climate Hazards Center. (n.d.). \textit{CHIRPS v3: Rainfall estimates from rain gauge and satellite observations}. Retrieved October 11, 2026, from \url{https://www.chc.ucsb.edu/data/chirps3}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Funk, C., Peterson, P., Harrison, L., Saldivar, R., Landsfeld, M., Pedreros, D., Shukla, S., Fink, A. H., Davenport, F., Peterson, S., Turner, W., Sonnier, A., Budde, M., Tabor, K., Verdin, J., Hauzaree, D., Naim, M., Alaso, D., \& Husak, G. (2026). The Climate Hazards Center Infrared Precipitation with Stations, version 3. \textit{Scientific Data, 13}(1), Article 718. \url{https://doi.org/10.1038/s41597-026-07096-4}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Gneiting, T., \& Raftery, A. E. (2007). Strictly proper scoring rules, prediction, and estimation. \textit{Journal of the American Statistical Association, 102}(477), 359-378. \url{https://doi.org/10.1198/016214506000001437}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Klappstein, N. J., Thomas, L., \& Michelot, T. (2023). Flexible hidden Markov models for behaviour-dependent habitat selection. \textit{Movement Ecology, 11}(1), Article 30. \url{https://doi.org/10.1186/s40462-023-00392-3}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Muñoz-Sabater, J. (2019). \textit{ERA5-Land hourly data from 1950 to present} [Data set]. Copernicus Climate Change Service (C3S) Climate Data Store (CDS). \url{https://doi.org/10.24381/cds.e2161bac}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Muñoz-Sabater, J., Dutra, E., Agustí-Panareda, A., Albergel, C., Arduini, G., Balsamo, G., Boussetta, S., Choulga, M., Harrigan, S., Hersbach, H., Martens, B., Miralles, D. G., Piles, M., Rodríguez-Fernández, N. J., Zsoter, E., Buontempo, C., \& Thépaut, J.-N. (2021). ERA5-Land: a state-of-the-art global reanalysis dataset for land applications. \textit{Earth System Science Data, 13}(9), 4349-4383. \url{https://doi.org/10.5194/essd-13-4349-2021}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 National Aeronautics and Space Administration. (n.d.). \textit{FIRMS active fire data}. Retrieved October 11, 2026, from \url{https://firms.modaps.eosdis.nasa.gov/active_fire/}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 National Aeronautics and Space Administration. (2024, March 6). \textit{VIIRS (S-NPP) I Band 375 m Active Fire Product NRT (Vector data): VNP14IMGTDL\_NRT}. MODAPS Services. \url{https://modaps.modaps.eosdis.nasa.gov/services/about/products/viirs-land-c2-nrt/vnp14imgtdl_nrt.html}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Sakti, A. D., Fauzi, A. I., Takeuchi, W., Pradhan, B., Yarime, M., Vega-Garcia, C., Agustina, E., Wibisono, D., Anggraini, T. S., Theodora, M. O., Ramadhanti, D., Muhammad, M. F., Aufaristama, M., Perdana, A. M. P., \& Wikantika, K. (2022). Spatial prioritization for wildfire mitigation by integrating heterogeneous spatial data: A new multi-dimensional approach for tropical rainforests. \textit{Remote Sensing, 14}(3), Article 543. \url{https://doi.org/10.3390/rs14030543}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Tan, Z. D., Carrasco, L. R., \& Taylor, D. (2020). Spatial correlates of forest and land fires in Indonesia. \textit{International Journal of Wildland Fire, 29}(12), 1088-1099. \url{https://doi.org/10.1071/wf20036}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Tan, Z. D., Carrasco, L. R., \& Taylor, D. (2021). Corrigendum to: Spatial correlates of forest and land fires in Indonesia. \textit{International Journal of Wildland Fire, 30}(9), 732. \url{https://doi.org/10.1071/wf20036_co}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Wooster, M. J., Roberts, G. J., Giglio, L., Roy, D. P., Freeborn, P. H., Boschetti, L., Justice, C., Ichoku, C., Schroeder, W., Davies, D., Smith, A. M. S., Setzer, A., Csiszar, I., Strydom, T., Frost, P., Zhang, T., Xu, W., de Jong, M. C., Johnston, J. M., ... San-Miguel-Ayanz, J. (2021). Satellite remote sensing of active fires: History and current status, applications and future requirements. \textit{Remote Sensing of Environment, 267}, Article 112694. \url{https://doi.org/10.1016/j.rse.2021.112694}\par\end{minipage}\par\vspace{5pt}
+
+\noindent\begin{minipage}{\columnwidth}\small\raggedright\hangindent=1em\hangafter=1 Zakaria, N. N., Othman, M., Sokkalingam, R., Daud, H., Abdullah, L., \& Abdul Kadir, E. (2019). Markov chain model development for forecasting air pollution index of Miri, Sarawak. \textit{Sustainability, 11}(19), Article 5190. \url{https://doi.org/10.3390/su11195190}\par\end{minipage}\par\vspace{5pt}
+
+\end{document}
