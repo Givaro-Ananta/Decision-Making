@@ -1,0 +1,16 @@
+== Preprocessing Grid + WorldCover ==
+  Grid penuh: 13,431 sel (121 x 111)
+  Membaca 17 tile WorldCover (sampling 1/100)...
+  Landcover: 11,820 grid terklasifikasi
+  Grid daratan: 7,735 sel -> grid_sumatra.parquet
+  Tetangga 8: 7,735 grid -> neighbors_8.parquet
+  Distribusi landcover (top 8):
+landcover
+tree        4558
+water       3028
+cropland      62
+mangrove      35
+grass         29
+builtup       22
+wetland        1
+exit=0

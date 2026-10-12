@@ -1,0 +1,21 @@
+== Preprocessing CHIRPS: 3631 file harian ==
+  ... 500/3631 file
+  ... 1000/3631 file
+  ... 1500/3631 file
+  ... 2000/3631 file
+  ... 2500/3631 file
+  ... 3000/3631 file
+  ... 3500/3631 file
+  2016: 610,756 baris grid-hari
+  2017: 2,229,055 baris grid-hari
+  2018: 2,229,055 baris grid-hari
+  2019: 2,229,055 baris grid-hari
+  2020: 2,235,162 baris grid-hari
+  2021: 2,229,055 baris grid-hari
+  2022: 2,229,055 baris grid-hari
+  2023: 2,229,055 baris grid-hari
+  2024: 2,235,162 baris grid-hari
+  2025: 2,229,055 baris grid-hari
+  2026: 1,484,001 baris grid-hari
+  Selesai. Output di C:\Akbar\Decision Making\data\processed\chirps_yearly
+exit=0

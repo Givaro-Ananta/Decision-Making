@@ -1,0 +1,9 @@
+== Preprocessing FIRMS VIIRS ==
+  FIRMS mentah gabungan: 2,731,384 titik
+  Filter bbox Sumatra: 2,731,384 -> 686,241 titik (25.1%)
+  Filter confidence >= 'n': 686,241 -> 659,717
+  Periode 2016-09-22..2026-08-31: sisa 331,378 titik
+  Hasil: 128,519 grid-hari aktif | 331,378 hotspot | grid unik: 3,662
+  Periode hasil: 2016-09-22 s.d. 2026-08-31
+  Simpan -> C:\Akbar\Decision Making\data\processed\firms_daily_grid.parquet
+exit=0

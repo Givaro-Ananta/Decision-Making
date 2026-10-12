@@ -39,3 +39,8 @@ desktop.ini
 .env
 *.key
 credentials.json
+
+# Publish only the selected journal PDF from local documentation.
+/docs/**
+!/docs/journal/
+!/docs/journal/ARTICLE_JTIK_LATEX.pdf
